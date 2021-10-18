@@ -1,4 +1,4 @@
-let project_folder = 'dist';
+let project_folder = 'docs';
 let source_folder = '#src';
 
 let path = {
@@ -36,7 +36,8 @@ let { src, dest } = require('gulp'),
 	rename = require('gulp-rename'),
 	uglify = require('gulp-uglify-es').default,
 	imagemin = require('gulp-imagemin'),
-	webp = require('gulp-webp');
+	webp = require('gulp-webp'),
+	ghPages = require('gulp-gh-pages');
 
 const browderSync = () => {
 	browdersync.init({
@@ -130,6 +131,10 @@ const clean = () => {
 
 let build = gulp.series(clean, gulp.parallel(js, css, html, images));
 let watch = gulp.parallel(build, watchFiles, browderSync);
+
+gulp.task('deploy', function () {
+	return gulp.src('./docs/**/*').pipe(ghPages());
+});
 
 exports.images = images;
 exports.js = js;
